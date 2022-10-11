@@ -4,6 +4,8 @@
     <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.HashMap"%>
+<%@ page import="java.util.Date"%>
+<%@ page import="java.text.SimpleDateFormat"%>
 <%
 	DAO dao = new DAO(application);
 
@@ -48,9 +50,6 @@ int pageNum =1;
         </div>
       </div>
 
-      <div class="col">
-        <input type="button" name="monthly" value ="monthly" class="btn btn-outline-secondary" id="monthly" >
-      </div>
       <div class="col">
         <input type="button" name="cancel" value ="결재취소" class="btn btn-outline-primary">
       </div>
@@ -108,18 +107,17 @@ int pageNum =1;
   </div>
   
   <script>
+    const today = new Date();
   document.querySelector('#daily').addEventListener('click', ()=>
   {alert("누름");
-	  let daily = document.querySelector("#daily");  
-    let init = document.querySelector("#init");
-    alert("누름");
-  	init.setAttribute("value", sysdate);
-    	
-    <!-- 
-	let init = document.getElementById("init");
-	init.value = date.toLocaleDateString();
-    -->
+	 let init = document.querySelector("#init");
+   let end = document.querySelector("#end");
+   <%String now = new SimpleDateFormat("yyyy-MM-dd").format(new Date()); %>
+
+   
     
+   init.setAttribute("value", "<%=now%>");
+    end.setAttribute("value","<%=now%>");
   }
   );
  
