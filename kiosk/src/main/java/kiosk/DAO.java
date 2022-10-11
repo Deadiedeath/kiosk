@@ -57,6 +57,7 @@ public class DAO extends JDBConnect {
 			rs.next(); //커서를 첫번째 행으로 이동
 			rs.getInt(1); //첫번째 컬럼값을 가져옴
 			totalcount = rs.getInt(1);//첫번째 컬럼값을 가져옴
+			
 		} catch (Exception e) {
 			System.out.println("오류 오류 문제가 발생");
 			e.printStackTrace();
@@ -111,12 +112,12 @@ public class DAO extends JDBConnect {
 			rs = stmt.executeQuery(query);
 			while(rs.next()) {
 				DTO dto = new DTO();
-				dto.setDate(rs.getString("order_date"));
-				dto.setFood_name(rs.getString("food_id"));
-				dto.setOrder_num(rs.getString("order_number"));
+				dto.setOrderDate(rs.getString("order_date"));
+				dto.setFoodName(rs.getString("food_id"));
+				dto.setOrderNumber(rs.getString("order_number"));
 				dto.setPrice(rs.getString("price"));
-				dto.setQuat(rs.getString("quantity"));
-				dto.setTable_num(rs.getString("table_number"));
+				dto.setQuantitiy(rs.getString("quantity"));
+				dto.setTableNumber(rs.getString("table_number"));
 				list.add(dto);
 			}
 			

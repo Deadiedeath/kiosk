@@ -89,12 +89,13 @@ int pageNum =1;
         
         <tr>
           <td><%=virtualNum %></td>
-          <td><%=dto.getDate() %></td>
-          <td><%=dto.getOrder_num() %></td>
-          <td><%=dto.getTable_num() %></td>
-          <td><%=dto.getFood_name() %></td>
-          <td><%=dto.getQuat() %></td>
+          <td><%=dto.getOrderDate() %></td>
+          <td class="orderNum"><%=dto.getOrderNumber() %></td>
+          <td><%=dto.getTableNumber() %></td>
+          <td><%=dto.getFoodName() %></td>
+          <td><%=dto.getQuantitiy() %></td>
           <td><%=dto.getPrice() %></td>
+          <td><input type="button" class = "delete" value="삭제"></td>
         </tr>
          <%} %>
         <tr>
@@ -109,7 +110,7 @@ int pageNum =1;
   <script>
     const today = new Date();
   document.querySelector('#daily').addEventListener('click', ()=>
-  {alert("누름");
+  {
 	 let init = document.querySelector("#init");
    let end = document.querySelector("#end");
    <%String now = new SimpleDateFormat("yyyy-MM-dd").format(new Date()); %>
@@ -120,7 +121,15 @@ int pageNum =1;
     end.setAttribute("value","<%=now%>");
   }
   );
- 
+  
+  let del = document.querySelectorAll(".delete");
+  
+  let orderNum = document.querySelectorAll(".orderNum");
+  for(i=0; i<del.length; i++){
+ 	 del[i].addEventListener("click", function(){
+ 		console.log(orderNum[i]);
+ 	 })
+  }
   
   </script>
 </body>
