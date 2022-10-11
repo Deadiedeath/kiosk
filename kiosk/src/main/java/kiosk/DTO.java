@@ -8,6 +8,10 @@ public class DTO {
 	private String food_name;
 	private String quat;
 	private String price;
+	
+	
+	
+	
 	public String getOrder_num() {
 		return order_num;
 	}
