@@ -81,12 +81,14 @@ int pageNum =1;
           <th>수량</th>
           <th>합계</th>
         </tr>
+         <form method = "post" class = "table">
         <%
         int virtualNum = 0;
         int countNum =0;
         for(DTO dto : lists){ 
         virtualNum = totalCount - (((pageNum-1)*pageSize) + countNum++);%>
         
+       
         <tr>
           <td><%=virtualNum %></td>
           <td><%=dto.getOrderDate() %></td>
@@ -95,9 +97,10 @@ int pageNum =1;
           <td><%=dto.getFoodName() %></td>
           <td><%=dto.getQuantitiy() %></td>
           <td><%=dto.getPrice() %></td>
-          <td><input type="button" class = "delete" value="삭제"></td>
+          <td><input type = "submit" onclick = deletePost()></td>
         </tr>
          <%} %>
+         </form>
         <tr>
         <td><%=boardPage.pagingStr(totalCount, pageSize, blockPage, pageNum, request.getRequestURI()) %></td>
          </tr>
@@ -131,6 +134,15 @@ int pageNum =1;
  	 })
   }
   
+  function deletePost() {
+	    var confirmed = confirm("정말로 삭제하겠습니까?"); 
+	    if (confirmed) {
+	        var form = document.writeFrm;       // 이름(name)이 "writeFrm"인 폼 선택
+	        form.method = "post";               // 전송 방식 
+	        form.action = "DeleteProcess.jsp?num=<%=dt.getNum()%>";  // 전송 경로
+	        form.submit();                      // 폼값 전송
+	    }
+	}
   </script>
 </body>
 </html>

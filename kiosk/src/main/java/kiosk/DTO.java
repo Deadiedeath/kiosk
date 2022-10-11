@@ -15,7 +15,7 @@ public class DTO {
 	
 	private String orderNumber;	//주문 번호
 	private String tableNumber;	//테이블 번호
-	private Date orderDate;		//일자
+	private String orderDate;		//일자
 	private String quantitiy;	//음식 수량
 	
 	private String pw;			//처음 비밀번호
@@ -85,11 +85,11 @@ public class DTO {
 		this.tableNumber = tableNumber;
 	}
 
-	public Date getOrderDate() {
+	public String getOrderDate() {
 		return orderDate;
 	}
 
-	public void setOrderDate(Date orderDate) {
+	public void setOrderDate(String orderDate) {
 		this.orderDate = orderDate;
 	}
 

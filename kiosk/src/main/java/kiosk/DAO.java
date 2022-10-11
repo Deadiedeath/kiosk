@@ -113,7 +113,7 @@ public class DAO extends JDBConnect {
 			while(rs.next()) {
 				DTO dto = new DTO();
 				dto.setOrderDate(rs.getString("order_date"));
-				dto.setFoodName(rs.getString("food_id"));
+				dto.setFoodName(rs.getString("food_name"));
 				dto.setOrderNumber(rs.getString("order_number"));
 				dto.setPrice(rs.getString("price"));
 				dto.setQuantitiy(rs.getString("quantity"));
