@@ -6,18 +6,28 @@
 <%@page import="java.util.HashMap"%>
 <%
 	DAO dao = new DAO(application);
-	
-	Map<String, Object> param = new HashMap<String, Object>();
-	String category = request.getParameter("category");
-	String foodname = request.getParameter("foodname");
-	String init = request.getParameter("init");
-	String end = request.getParameter("end");
-	if(foodname != null){
-		param.put("init", init);
-		param.put("end", end);
-		param.put("category", category);
-		param.put("foodname", foodname);
-	}
+
+
+Map<String, Object> param = new HashMap<String, Object>();
+String category = request.getParameter("category");
+String foodname = request.getParameter("foodname");
+String init = request.getParameter("init");
+String end = request.getParameter("end");
+if(foodname != null){
+	param.put("init", init);
+	param.put("end", end);
+	param.put("category", category);
+	param.put("foodname", foodname);
+}
+int totalCount = dao.selectCount(param);
+
+
+int blockPage = Integer.parseInt(application.getInitParameter("PAGES_PER_BLOCK"));
+int pageSize =Integer.parseInt(application.getInitParameter("POSTS_PER_PAGE"));
+int totalPage = (int)Math.ceil((double)totalCount/pageSize);  //전체페이지 수
+int pageNum =1;
+
+
 	
 	List<DTO> lists = dao.selectList(param);
 	dao.close();
@@ -34,12 +44,12 @@
     <div class="row">
       <div class="col">
         <div class="d-grid gap-2 d-md-block">
-          <button class="btn btn-outline-secondary" type="button" name ="daily" id="daily" onclick ="location='resultprocess.jsp?result=daily'">일매출</button>
+          <button class="btn btn-outline-secondary" type="button" name ="daily" id="daily" >일매출</button>
         </div>
       </div>
 
       <div class="col">
-        <input type="button" name="monthly" value ="monthly" class="btn btn-outline-secondary" id="monthly" onclick ="location='resultprocess.jsp?result=monthly'">
+        <input type="button" name="monthly" value ="monthly" class="btn btn-outline-secondary" id="monthly" >
       </div>
       <div class="col">
         <input type="button" name="cancel" value ="결재취소" class="btn btn-outline-primary">
@@ -54,14 +64,8 @@
       </div>
       <form method="get">
       <div class="col">
-        <p><input type="date" name="init" id="">부터 <input type="date" name="end" id="">까지</p>
-        <select name="category" id="">
-          <option value=""></option>
-          <option value="">음식</option>
-          <option value="">음료</option>
-          <option value="">디저트</option>
-        </select>
-        <input type="text" name ="foodname">
+        <p><input type="date" name="init" id="init">부터 <input type="date" name="end" id="end">까지</p>
+        <input type="text" name ="foodname" placeholder="음식이름을 입력하세요">
         <input type="submit" value="search">
       </div>
       </form>
@@ -78,10 +82,14 @@
           <th>수량</th>
           <th>합계</th>
         </tr>
-        <%for(DTO dto : lists){ %>
+        <%
+        int virtualNum = 0;
+        int countNum =0;
+        for(DTO dto : lists){ 
+        virtualNum = totalCount - (((pageNum-1)*pageSize) + countNum++);%>
         
         <tr>
-          <td></td>
+          <td><%=virtualNum %></td>
           <td><%=dto.getDate() %></td>
           <td><%=dto.getOrder_num() %></td>
           <td><%=dto.getTable_num() %></td>
@@ -89,17 +97,32 @@
           <td><%=dto.getQuat() %></td>
           <td><%=dto.getPrice() %></td>
         </tr>
-        <%} %>
+         <%} %>
+        <tr>
+        <td><%=boardPage.pagingStr(totalCount, pageSize, blockPage, pageNum, request.getRequestURI()) %></td>
+         </tr>
+       
       </table>
+      
     </div>
   </div>
   
   <script>
-  <!-- document.querySelector('#daily').addEventListener('click',()=>
-  {alert("z");  
+  document.querySelector('#daily').addEventListener('click', ()=>
+  {alert("누름");
+	  let daily = document.querySelector("#daily");  
+    let init = document.querySelector("#init");
+    alert("누름");
+  	init.setAttribute("value", sysdate);
+    	
+    <!-- 
+	let init = document.getElementById("init");
+	init.value = date.toLocaleDateString();
+    -->
+    
   }
   );
-  -->
+ 
   
   </script>
 </body>

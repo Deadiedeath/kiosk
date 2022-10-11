@@ -3,9 +3,9 @@ package kiosk;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
-import kiosk.DTO;
+
+
 import javax.servlet.ServletContext;
-import kiosk.JDBConnect;
 
 public class DAO extends JDBConnect {
 
@@ -14,25 +14,96 @@ public class DAO extends JDBConnect {
 		super(application);
 	}
 		
+	//게시물 수 확인
+	public int selectCount(Map<String, Object> map) {
+		int totalcount =0;
+		//쿼리문 작성
+		String query = "select count(*) from restaurant_order";
+		
+	if((map.get("init") != null  && map.get("end") != null)) {
+			
+			if((map.get("init") != ""  && map.get("end") !=  "")) {
+				
+				query += "where order_date between '" + map.get("init") + "' and '" + map.get("end") + "'";
+				
+				if( map.get("foodname") != null)
+				{
+					if( map.get("foodname") != "") {
+						
+					query += ", foodname "+  "like '%" + map.get("foodname") + "%'";}
+					
+				}
+				}
+			
+		else {
+						
+			if(map.get("foodname") != null)
+				
+			{
+				
+				if(map.get("foodname") != "") {
+					
+				 query += " where foodname like '%" + map.get("foodname") + "%'";
+				 
+				}
+				
+			}
+			}
+	}
+		//쿼리문 생성
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query);
+			rs.next(); //커서를 첫번째 행으로 이동
+			rs.getInt(1); //첫번째 컬럼값을 가져옴
+			totalcount = rs.getInt(1);//첫번째 컬럼값을 가져옴
+		} catch (Exception e) {
+			System.out.println("오류 오류 문제가 발생");
+			e.printStackTrace();
+		}
+		
+		
+		
+		return totalcount;
+	}
+	
+	
 	//조건에 맞는 DB검색 문
 	public List<DTO> selectList(Map<String,Object> map){
 		List<DTO> list = new Vector<DTO>();
 		
 		String query = "select * from restaurant_order ";
 		
-		if(map.get("init") !=null  && map.get("end") != null) {
-			query += "where order_date between '" + map.get("init") + "' and '" + map.get("end") + "'";
-			if(map.get("category") != null || map.get("foodname") != null)
-			{
-				 query += ", "+ map.get("category") + "like '%" + map.get("foodname") + "%'";
-			}
-		}else {
-			if(map.get("category") != null || map.get("foodname") != null)
-			{
-				 query += ", "+ map.get("category") + "like '%" + map.get("foodname") + "%'";
-			}
+	if((map.get("init") != null  && map.get("end") != null)) {
 			
-		}
+			if((map.get("init") != ""  && map.get("end") !=  "")) {
+				
+				query += "where order_date between '" + map.get("init") + "' and '" + map.get("end") + "'";
+				
+				if( map.get("foodname") != null)
+				{
+					if( map.get("foodname") != "") {
+						
+					query += ", foodname "+  "like '%" + map.get("foodname") + "%'";}
+					
+				}
+				}
+			
+		else {
+						
+			if(map.get("foodname") != null)
+				
+			{
+				
+				if(map.get("foodname") != "") {
+					
+				 query += " where foodname like '%" + map.get("foodname") + "%'";
+				 
+				}
+				
+			}
+			}
+	}
 		System.out.println(query);
 		
 		try {
