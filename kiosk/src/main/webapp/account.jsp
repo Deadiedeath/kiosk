@@ -10,7 +10,11 @@
 	Map<String, Object> param = new HashMap<String, Object>();
 	String category = request.getParameter("category");
 	String foodname = request.getParameter("foodname");
+	String init = request.getParameter("init");
+	String end = request.getParameter("end");
 	if(foodname != null){
+		param.put("init", init);
+		param.put("end", end);
 		param.put("category", category);
 		param.put("foodname", foodname);
 	}
@@ -23,19 +27,19 @@
 <head>
 <meta charset="UTF-8">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-<title>Insert title here</title>
+<title>매출 관리</title>
 </head>
 <body>
  <div class="container">
     <div class="row">
       <div class="col">
         <div class="d-grid gap-2 d-md-block">
-          <button class="btn btn-outline-secondary" type="button" name ="daily">일매출</button>
+          <button class="btn btn-outline-secondary" type="button" name ="daily" id="daily" onclick ="location='resultprocess.jsp?result=daily'">일매출</button>
         </div>
       </div>
 
       <div class="col">
-        <input type="button" name="monthly" value ="monthly" class="btn btn-outline-secondary">
+        <input type="button" name="monthly" value ="monthly" class="btn btn-outline-secondary" id="monthly" onclick ="location='resultprocess.jsp?result=monthly'">
       </div>
       <div class="col">
         <input type="button" name="cancel" value ="결재취소" class="btn btn-outline-primary">
@@ -50,9 +54,12 @@
       </div>
       <form method="get">
       <div class="col">
-        <p><input type="date" name="init" id="">부터 <input type="date" name="init" id="">까지</p>
+        <p><input type="date" name="init" id="">부터 <input type="date" name="end" id="">까지</p>
         <select name="category" id="">
-          <option value="">카테고리</option>
+          <option value=""></option>
+          <option value="">음식</option>
+          <option value="">음료</option>
+          <option value="">디저트</option>
         </select>
         <input type="text" name ="foodname">
         <input type="submit" value="search">
@@ -72,6 +79,7 @@
           <th>합계</th>
         </tr>
         <%for(DTO dto : lists){ %>
+        
         <tr>
           <td></td>
           <td><%=dto.getDate() %></td>
@@ -85,5 +93,14 @@
       </table>
     </div>
   </div>
+  
+  <script>
+  <!-- document.querySelector('#daily').addEventListener('click',()=>
+  {alert("z");  
+  }
+  );
+  -->
+  
+  </script>
 </body>
 </html>
