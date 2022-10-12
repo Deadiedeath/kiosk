@@ -4,16 +4,32 @@
     <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.HashMap"%>
+<%@ page import="java.util.Date"%>
+<%@ page import="java.text.SimpleDateFormat"%>
 <%
 	DAO dao = new DAO(application);
-	
-	Map<String, Object> param = new HashMap<String, Object>();
-	String category = request.getParameter("category");
-	String foodname = request.getParameter("foodname");
-	if(foodname != null){
-		param.put("category", category);
-		param.put("foodname", foodname);
-	}
+
+
+Map<String, Object> param = new HashMap<String, Object>();
+String category = request.getParameter("category");
+String foodname = request.getParameter("foodname");
+String init = request.getParameter("init");
+String end = request.getParameter("end");
+if(foodname != null){
+	param.put("init", init);
+	param.put("end", end);
+	param.put("category", category);
+	param.put("foodname", foodname);
+}
+int totalCount = dao.selectCount(param);
+
+
+int blockPage = Integer.parseInt(application.getInitParameter("PAGES_PER_BLOCK"));
+int pageSize =Integer.parseInt(application.getInitParameter("POSTS_PER_PAGE"));
+int totalPage = (int)Math.ceil((double)totalCount/pageSize);  //전체페이지 수
+int pageNum =1;
+
+
 	
 	List<DTO> lists = dao.selectList(param);
 	dao.close();
@@ -23,20 +39,17 @@
 <head>
 <meta charset="UTF-8">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-<title>Insert title here</title>
+<title>매출 관리</title>
 </head>
 <body>
  <div class="container">
     <div class="row">
       <div class="col">
         <div class="d-grid gap-2 d-md-block">
-          <button class="btn btn-outline-secondary" type="button" name ="daily">일매출</button>
+          <button class="btn btn-outline-secondary" type="button" name ="daily" id="daily" >일매출</button>
         </div>
       </div>
 
-      <div class="col">
-        <input type="button" name="monthly" value ="monthly" class="btn btn-outline-secondary">
-      </div>
       <div class="col">
         <input type="button" name="cancel" value ="결재취소" class="btn btn-outline-primary">
       </div>
@@ -50,11 +63,8 @@
       </div>
       <form method="get">
       <div class="col">
-        <p><input type="date" name="init" id="">부터 <input type="date" name="init" id="">까지</p>
-        <select name="category" id="">
-          <option value="">카테고리</option>
-        </select>
-        <input type="text" name ="foodname">
+        <p><input type="date" name="init" id="init">부터 <input type="date" name="end" id="end">까지</p>
+        <input type="text" name ="foodname" placeholder="음식이름을 입력하세요">
         <input type="submit" value="search">
       </div>
       </form>
@@ -71,19 +81,60 @@
           <th>수량</th>
           <th>합계</th>
         </tr>
-        <%for(DTO dto : lists){ %>
+        <form method = "post" class = "table" action = "DeleteProcess.jsp">
+        <%
+        int virtualNum = 0;
+        int countNum =0;
+        for(DTO dto : lists){ 
+        virtualNum = totalCount - (((pageNum-1)*pageSize) + countNum++);%>
+        
+       
         <tr>
-          <td></td>
-          <td><%=dto.getDate() %></td>
-          <td><%=dto.getOrder_num() %></td>
-          <td><%=dto.getTable_num() %></td>
-          <td><%=dto.getFood_name() %></td>
-          <td><%=dto.getQuat() %></td>
+          <td><%=virtualNum %></td>
+          <td><%=dto.getOrderDate() %></td>
+          <td class="orderNum"><%=dto.getOrderNumber() %></td>
+          <td><%=dto.getTableNumber() %></td>
+          <td><%=dto.getFoodName() %></td>
+          <td><%=dto.getQuantitiy() %></td>
           <td><%=dto.getPrice() %></td>
+          <td><input type = "submit" name = "orderNum" value = "<%=dto.getOrderNumber() %>")>삭제</input></td>
         </tr>
-        <%} %>
+         <%} %>
+           </form> 
+        <tr>
+        <td><%=boardPage.pagingStr(totalCount, pageSize, blockPage, pageNum, request.getRequestURI()) %></td>
+         </tr>
+       
       </table>
+      
     </div>
   </div>
+  
+  <script>
+  
+  //날짜 불러오기
+    const today = new Date();
+    const past = addDays(today, -30);
+    
+    console.log(past);
+    console.log(new Date());
+  document.querySelector('#daily').addEventListener('click', ()=>
+  {
+	 let init = document.querySelector("#init");
+   let end = document.querySelector("#end");
+   <%String now = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+   
+   
+   String past = new SimpleDateFormat("yyyy-MM-dd").format(new Date());  %>
+
+   
+    
+   init.setAttribute("value", "<%=now%>");
+    end.setAttribute("value","<%=now%>");
+  }
+  );
+ 
+
+  </script>
 </body>
 </html>
