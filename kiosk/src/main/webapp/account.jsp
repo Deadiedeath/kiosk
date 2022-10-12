@@ -81,7 +81,7 @@ int pageNum =1;
           <th>수량</th>
           <th>합계</th>
         </tr>
-         <form method = "post" class = "table">
+        <form method = "post" class = "table" action = "DeleteProcess.jsp">
         <%
         int virtualNum = 0;
         int countNum =0;
@@ -97,10 +97,10 @@ int pageNum =1;
           <td><%=dto.getFoodName() %></td>
           <td><%=dto.getQuantitiy() %></td>
           <td><%=dto.getPrice() %></td>
-          <td><input type = "submit" onclick = deletePost()></td>
+          <td><input type = "submit" name = "orderNum" value = "<%=dto.getOrderNumber() %>")>삭제</input></td>
         </tr>
          <%} %>
-         </form>
+           </form> 
         <tr>
         <td><%=boardPage.pagingStr(totalCount, pageSize, blockPage, pageNum, request.getRequestURI()) %></td>
          </tr>
@@ -111,12 +111,21 @@ int pageNum =1;
   </div>
   
   <script>
+  
+  //날짜 불러오기
     const today = new Date();
+    const past = addDays(today, -30);
+    
+    console.log(past);
+    console.log(new Date());
   document.querySelector('#daily').addEventListener('click', ()=>
   {
 	 let init = document.querySelector("#init");
    let end = document.querySelector("#end");
-   <%String now = new SimpleDateFormat("yyyy-MM-dd").format(new Date()); %>
+   <%String now = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+   
+   
+   String past = new SimpleDateFormat("yyyy-MM-dd").format(new Date());  %>
 
    
     
@@ -124,25 +133,8 @@ int pageNum =1;
     end.setAttribute("value","<%=now%>");
   }
   );
-  
-  let del = document.querySelectorAll(".delete");
-  
-  let orderNum = document.querySelectorAll(".orderNum");
-  for(i=0; i<del.length; i++){
- 	 del[i].addEventListener("click", function(){
- 		console.log(orderNum[i]);
- 	 })
-  }
-  
-  function deletePost() {
-	    var confirmed = confirm("정말로 삭제하겠습니까?"); 
-	    if (confirmed) {
-	        var form = document.writeFrm;       // 이름(name)이 "writeFrm"인 폼 선택
-	        form.method = "post";               // 전송 방식 
-	        form.action = "DeleteProcess.jsp?num=<%=dt.getNum()%>";  // 전송 경로
-	        form.submit();                      // 폼값 전송
-	    }
-	}
+ 
+
   </script>
 </body>
 </html>

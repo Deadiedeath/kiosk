@@ -24,7 +24,7 @@ public class DAO extends JDBConnect {
 			
 			if((map.get("init") != ""  && map.get("end") !=  "")) {
 				
-				query += "where order_date between '" + map.get("init") + "' and '" + map.get("end") + "'";
+				query += " where order_date between '" + map.get("init") + "' and '" + map.get("end") + "'";
 				
 				if( map.get("foodname") != null)
 				{
@@ -79,7 +79,7 @@ public class DAO extends JDBConnect {
 			
 			if((map.get("init") != ""  && map.get("end") !=  "")) {
 				
-				query += "where order_date between '" + map.get("init") + "' and '" + map.get("end") + "'";
+				query += " where order_date between '" + map.get("init") + "' and '" + map.get("end") + "'";
 				
 				if( map.get("foodname") != null)
 				{
@@ -127,5 +127,26 @@ public class DAO extends JDBConnect {
 		}
 				
 		return list;
+	}
+	
+	
+	public int deletePost(String num) {
+		int result =0;
+		
+		String query = "delete from restaurant_order where ORDER_NUMBER = ?";
+		
+		try {
+			psmt = con.prepareStatement(query);
+			psmt.setString(1, num);
+			result = psmt.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("삭제중 오류");
+			e.printStackTrace();
+		}
+		
+		
+		return result;
+		
+		
 	}
 }
